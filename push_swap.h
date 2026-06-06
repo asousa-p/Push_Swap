@@ -25,7 +25,6 @@ int		stack_pop(t_stack *s);
 int		stack_peek(t_stack *s);
 int		stack_is_sorted(t_stack *s);
 void	stack_free(t_stack *s);
+int		stack_size(t_stack *s);
 
 #endif
-
-// int		stack_size(t_stack *s)
