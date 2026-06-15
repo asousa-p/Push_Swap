@@ -82,6 +82,7 @@ void	op_ra(t_stack *a) //if a is empty??
 	t_node *index;
 
 	if(!a || a->size < 2)
+		return ;
 	temp = a->top;
 	index = a->top; //set both to top
 	while (index->next != NULL) //while we are not at the last node
@@ -112,7 +113,7 @@ void	op_rb(t_stack *b)
 void	op_rr(t_stack *a, t_stack *b)
 {
 	t_node *temp;
-	t_list *index;
+	t_node *index;
 
 	if(a && a->size > 2)
 	{
@@ -139,10 +140,77 @@ void	op_rr(t_stack *a, t_stack *b)
 
 void	op_rra(t_stack *a)
 {
+	t_node *current;
+	t_node *prev;
 	t_node *temp;
-	t_node *index;
 
 	if (!a || a->size < 2)
 		return ;
-	
+	current = a->top;//
+	temp = a->top;
+	while (current->next != NULL)
+	{
+		prev = current; //second last
+		current = current->next; //last
+	}
+	a->top = current; //top becomes last node value
+	current->next = temp; //new top next is old top
+	prev->next = NULL; //second last becomes last and is set to NULL
+	write(1, "rra\n", 4);
+}
+
+void	op_rrb(t_stack *b)
+{
+	t_node *current;
+	t_node *prev;
+	t_node *temp;
+
+	if (!b || b->size < 2)
+		return ;
+	current = b->top;
+	temp = b->top;
+	while (current->next != NULL)
+	{
+		prev = current; //second last
+		current = current->next; //last
+	}
+	b->top = current; // last becomes top
+	current->next = temp;
+	prev->next = NULL;
+	write(1, "rrb\n", 4);
+}
+
+void	op_rrr(t_stack *a, t_stack *b)
+{
+	t_node *current;
+	t_node *prev;
+	t_node *temp;
+
+	if (a && a->size >= 2) // =?
+	{
+		current = a->top;
+		temp = a->top;
+		while(current->next != NULL)
+		{
+			prev = current;
+			current = current->next;
+		}
+		a->top = current;
+		current->next = temp;
+		prev->next = NULL;
+	}
+	if (b && b->size >= 2)
+	{
+		current = b->top;
+		temp = b->top;
+		while (current->next != NULL)
+		{
+			prev = current;
+			current = current->next;
+		}
+		b->top = current;
+		current->next = temp;
+		prev->next = NULL;
+	}
+	write(1, "rrr\n", 4);
 }
