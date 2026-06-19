@@ -1,10 +1,12 @@
 #include "push_swap.h"
 
-void	op_sa(t_stack *a)
+void	op_sa(t_stack *a, t_bench *bench)
 {
 	t_node *first;
 	t_node *second;
 
+	if (bench)
+        bench->sa++;
 	if (!a || a->size < 2)
 		return ;
 	first = a->top;
@@ -15,11 +17,14 @@ void	op_sa(t_stack *a)
 	write(1, "sa\n", 3);
 }
 
-void	op_sb(t_stack *b)
+void	op_sb(t_stack *b, t_bench *bench)
 {
 	t_node *first;
 	t_node *second;
 
+
+	if (bench)
+		bench->sb++;
 	if (!b || b->size < 2)
 		return;
 	first = b->top;
@@ -30,12 +35,14 @@ void	op_sb(t_stack *b)
 	write(1, "sb\n", 3);
 }
 
-void	op_ss(t_stack *a, t_stack *b)
+void	op_ss(t_stack *a, t_stack *b, t_bench *bench)
 {
 	t_node *first;
 	t_node *second;
 
-	if (a && a->size > 2)
+	if (bench)
+		bench->ss++;
+	if (a && a->size >= 2)
 	{
 		first = a->top;
 		second = a->top->next;
@@ -43,7 +50,7 @@ void	op_ss(t_stack *a, t_stack *b)
 		second->next = first;
 		a->top = second;
 	}
-	if (b && b->size > 2)
+	if (b && b->size >= 2)
 	{
 		first = b->top;
 		second = b->top->next;
@@ -54,33 +61,45 @@ void	op_ss(t_stack *a, t_stack *b)
 	write(1, "ss\n", 3);
 }
 
-void	op_pa(t_stack *a, t_stack *b) //push to a
+void op_pa(t_stack *a, t_stack *b, t_bench *bench)
 {
-	int	val;
+    int val;
+    int idx;
 
-	if (!b || stack_size(b) == 0)
-		return ;
-	val = stack_pop(b);
-	stack_push(a, val);
-	write(1, "pa\n", 3);
+    if (bench)
+        bench->pa++;
+    if (!b || stack_size(b) == 0)
+        return ;
+    val = stack_peek(b); // look at value before touching anything
+    idx = stack_peek_index(b); // look at index before touching anything
+    stack_pop(b); // now safely remove the node
+    stack_push(a, val, idx);  // push both across to a
+    write(1, "pa\n", 3);
 }
 
-void	op_pb(t_stack *a, t_stack *b)
+void op_pb(t_stack *a, t_stack *b, t_bench *bench)
 {
-	int val;
+    int val;
+    int idx;
 
-	if (!a || stack_size(a) == 0)
-		return ;
-	val = stack_pop(a);
-	stack_push(b, val);
-	write(1, "pb\n", 3);
+    if (bench)
+        bench->pb++;
+    if (!a || stack_size(a) == 0)
+        return ;
+    val = stack_peek(a); // grab value safely
+    idx = stack_peek_index(a); // grab index safely
+    stack_pop(a); // remove node
+    stack_push(b, val, idx);  // push both across to b
+    write(1, "pb\n", 3);
 }
 
-void	op_ra(t_stack *a) //if a is empty??
+void	op_ra(t_stack *a, t_bench *bench) //if a is empty??
 {
 	t_node *temp;
 	t_node *index;
 
+	if (bench)
+		bench->ra++;
 	if(!a || a->size < 2)
 		return ;
 	temp = a->top;
@@ -93,11 +112,13 @@ void	op_ra(t_stack *a) //if a is empty??
 	write(1, "ra\n", 3);
 }
 
-void	op_rb(t_stack *b)
+void	op_rb(t_stack *b, t_bench *bench)
 {
 	t_node *temp;
 	t_node *index;
 
+	if (bench)
+		bench->rb++;
 	if(!b || b->size < 2)
 		return ;
 	temp = b->top;
@@ -110,12 +131,14 @@ void	op_rb(t_stack *b)
 	write(1, "rb\n", 3);
 }
 
-void	op_rr(t_stack *a, t_stack *b)
+void	op_rr(t_stack *a, t_stack *b, t_bench *bench)
 {
 	t_node *temp;
 	t_node *index;
 
-	if(a && a->size > 2)
+	if (bench)
+		bench->rr++;
+	if(a && a->size >= 2)
 	{
 		temp = a->top;
 		index = a->top;
@@ -125,7 +148,7 @@ void	op_rr(t_stack *a, t_stack *b)
 		a->top = temp->next;
 		temp->next = NULL;
 	}
-	if (b && b->size > 2)
+	if (b && b->size >= 2)
 	{
 		temp = b->top;
 		index = b->top;
@@ -138,12 +161,14 @@ void	op_rr(t_stack *a, t_stack *b)
 	write(1, "rr\n", 3);
 }
 
-void	op_rra(t_stack *a)
+void	op_rra(t_stack *a, t_bench *bench)
 {
 	t_node *current;
 	t_node *prev;
 	t_node *temp;
 
+	if (bench)
+		bench->rra++;
 	if (!a || a->size < 2)
 		return ;
 	current = a->top;//
@@ -159,12 +184,14 @@ void	op_rra(t_stack *a)
 	write(1, "rra\n", 4);
 }
 
-void	op_rrb(t_stack *b)
+void	op_rrb(t_stack *b, t_bench *bench)
 {
 	t_node *current;
 	t_node *prev;
 	t_node *temp;
 
+	if (bench)
+		bench->rrb++;
 	if (!b || b->size < 2)
 		return ;
 	current = b->top;
@@ -180,13 +207,15 @@ void	op_rrb(t_stack *b)
 	write(1, "rrb\n", 4);
 }
 
-void	op_rrr(t_stack *a, t_stack *b)
+void	op_rrr(t_stack *a, t_stack *b, t_bench *bench)
 {
 	t_node *current;
 	t_node *prev;
 	t_node *temp;
 
-	if (a && a->size >= 2) // =?
+	if (bench)
+		bench->rrr++;
+	if (a && a->size >= 2) 
 	{
 		current = a->top;
 		temp = a->top;
