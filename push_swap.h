@@ -54,4 +54,11 @@ void    op_rra(t_stack *a, t_bench *bench);
 void    op_rrb(t_stack *b, t_bench *bench);
 void    op_rrr(t_stack *a, t_stack *b, t_bench *bench);
 
+int		find_max_index(t_stack *b);
+void	push_chunks(t_stack *a, t_stack *b, t_bench *bench);
+void	pull_chunks(t_stack *a, t_stack *b, t_bench *bench);
+void    chunk_sort(t_stack *a, t_bench *bench);
+
+void	adaptive_sort(t_stack *a, t_bench *bench);
+
 #endif
