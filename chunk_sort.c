@@ -6,14 +6,14 @@
 /*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 18:41:30 by aimdoyle          #+#    #+#             */
-/*   Updated: 2026/06/19 20:06:13 by aimdoyle         ###   ########.fr       */
+/*   Updated: 2026/06/19 22:13:48 by aimdoyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include <math.h>
 
-int		find_max_index(t_stack *b) // find biggest in b
+static int	find_max_index(t_stack *b) // find biggest in b
 {
     t_node  *tmp;
     int     max;
@@ -29,7 +29,7 @@ int		find_max_index(t_stack *b) // find biggest in b
     return (max);
 }
 
-void	push_chunks(t_stack *a, t_stack *b, t_bench *bench)
+static void	push_chunks(t_stack *a, t_stack *b, t_bench *bench)
 {
 	int	chunk_size;
 	int	chunk_min;
@@ -55,7 +55,7 @@ void	push_chunks(t_stack *a, t_stack *b, t_bench *bench)
 	}
 }
 
-void	pull_chunks(t_stack *a, t_stack *b, t_bench *bench)
+static void	pull_chunks(t_stack *a, t_stack *b, t_bench *bench)
 {
 	int	max;
 

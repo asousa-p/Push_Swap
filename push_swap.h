@@ -18,6 +18,20 @@ typedef struct s_stack
     int     size;
 }   t_stack;
 
+typedef enum e_strategy
+{
+    ADAPTIVE,
+    SIMPLE,
+    MEDIUM,
+    COMPLEX
+}   t_strategy;
+
+typedef struct s_opts
+{
+    t_strategy  strategy;
+    int         bench;
+}   t_opts;
+
 typedef struct s_bench
 {
     int sa;
@@ -54,11 +68,10 @@ void    op_rra(t_stack *a, t_bench *bench);
 void    op_rrb(t_stack *b, t_bench *bench);
 void    op_rrr(t_stack *a, t_stack *b, t_bench *bench);
 
-int		find_max_index(t_stack *b);
-void	push_chunks(t_stack *a, t_stack *b, t_bench *bench);
-void	pull_chunks(t_stack *a, t_stack *b, t_bench *bench);
 void    chunk_sort(t_stack *a, t_bench *bench);
 
 void	adaptive_sort(t_stack *a, t_bench *bench);
+
+void	write_bench(t_bench *bench, double disorder, t_opts *opts);
 
 #endif
