@@ -6,24 +6,24 @@
 /*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 18:41:30 by aimdoyle          #+#    #+#             */
-/*   Updated: 2026/06/24 19:13:14 by aimdoyle         ###   ########.fr       */
+/*   Updated: 2026/06/24 19:35:14 by aimdoyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int  find_max_index(t_stack *s)
+static int find_max_index(t_stack *b)
 {
-    t_node  *current;
+    t_node  *tmp;
     int     max;
 
-    current = s->top;
-    max = current->index;
-    while (current)
+    tmp = b->top;
+    max = tmp->index;
+    while (tmp)
     {
-        if (current->index > max)
-            max = current->index;
-        current = current->next;
+        if (tmp->index > max)
+            max = tmp->index;
+        tmp = tmp->next;
     }
     return (max);
 }
