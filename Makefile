@@ -1,36 +1,47 @@
-NAME		= push_swap
-CC		= cc
-CFLAGS		= -Wall -Wextra -Werror
+NAME = push_swap
 
-LIBFT_DIR	= libft
-LIBFT		= $(LIBFT_DIR)/libft.a
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
-SRC		= main.c \
-		  stack.c \
-		  operations.c \
-		  parse.c \
-		  utils.c
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
-OBJ		= $(SRC:.c=.o)
+INCLUDES = -I. -I$(LIBFT_DIR)
+
+SRCS = main.c \
+       stack.c \
+       operations.c \
+       chunk_sort.c \
+       adaptive_sort.c \
+       write_bench.c \
+       bubble_sort.c \
+       radix_sort.c \
+       disorder.c \
+       parse.c \
+       parse_flags.c \
+       split.c \
+       free.c
+
+OBJS = $(SRCS:.c=.o)
+
+%.o: %.c push_swap.h
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -lm -o $(NAME)
+
+$(LIBFT):
+	make -C $(LIBFT_DIR)
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -L$(LIBFT_DIR) -lft -o $(NAME)
-
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -I. -I$(LIBFT_DIR) -c $< -o $@
-
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -f $(OBJ)
+	rm -f $(OBJS)
+	make -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
+	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

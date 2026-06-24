@@ -1,16 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/20 00:15:15 by aimdoyle          #+#    #+#             */
+/*   Updated: 2026/06/20 03:01:34 by aimdoyle         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
-# include <stdlib.h>
+# include "libft.h"
 # include <limits.h>
+# include <stdbool.h>
+# include <stddef.h>
+# include <stdint.h>
+# include <stdlib.h>
 # include <unistd.h>
-# include "libft/libft.h"
-
-typedef struct s_node
-{
-    int             value;
-    int             index;
-    struct s_node   *next;
-}   t_node;
 
 typedef struct s_stack
 {
@@ -68,8 +76,25 @@ void    op_rra(t_stack *a, t_bench *bench);
 void    op_rrb(t_stack *b, t_bench *bench);
 void    op_rrr(t_stack *a, t_stack *b, t_bench *bench);
 
-void    chunk_sort(t_stack *a, t_bench *bench);
+char    **split(char const *s);
+long    ft_atol(const char *nptr);
+t_node  *ps_lstnew(int content);
+char    **avtoarray(int ac, char **av);
+t_stack *parse_args(int ac, char **av);
+void    exit_error(char **array);
+void    isvalid(char **array);
+void    isdouble(char **array);
+double  compute_disorder(t_stack *a);
+int     is_sorted(t_stack *a);
+t_stack *create_stack(char **array);
+void    parse_flags(int ac, char **av, t_opts *opts);
+int     ft_strcmp(char *s1, char *s2);
+void    freeit(char **array);
+void    index_nodes(t_stack *a);
 
+void	bubble_sort(t_stack *a, t_bench *bench);
+void    chunk_sort(t_stack *a, t_bench *bench);
+void    radix_sort(t_stack *a, t_bench *bench);
 void	adaptive_sort(t_stack *a, t_bench *bench);
 
 void	write_bench(t_bench *bench, double disorder, t_opts *opts);
