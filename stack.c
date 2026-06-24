@@ -1,4 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/20 00:36:38 by aimdoyle          #+#    #+#             */
+/*   Updated: 2026/06/20 00:36:40 by aimdoyle         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
+
+void	error_exit(void)
+{
+	write(2, "Error\n", 6);
+	exit(1);
+}
 
 t_stack	*stack_new(void)
 {
@@ -12,27 +30,76 @@ t_stack	*stack_new(void)
 	return (stack);
 }
 
-void	stack_push(t_stack *s, int value)
+void stack_push(t_stack *s, int value, int index)
 {
-	t_node *node; // here i create a new node
-
-	node = malloc(sizeof(t_node)); // here i malloc new node
-	if (!node) // safety if malloc fails
-		return ;
-	node->value = value; // set value given in parameters
-	node->next = s->top; // new node points the the top of the stack passd within param
-	s->top = node; // stack top becomes new node
-	s->size++; // the stacks size increases by one plate
+    t_node *node;
+    node = malloc(sizeof(t_node));
+    if (!node)
+        return ;
+    node->value = value;
+    node->index = index;
+    node->next = s->top;
+    s->top = node;
+    s->size++;
 }
-int		stack_pop(t_stack *s)
-{
-	t_node *temp;
-	int val;
 
-	temp = s->top; // when we have top must we always point to it from the stack?
-	val = temp->value; 
-	s->top = temp->next; //i couldnt use top->next not sure if this is right...
-	free(temp);
-	s->size--; //decrement one because we are freeing the top node so size decreases
-	return (val);
+t_node stack_pop(t_stack *s)
+{
+    t_node  result;
+    t_node  *temp;
+
+	if (!s || !s->top)  // safety check added
+    {
+        result.value = 0;
+        result.index = 0;
+        result.next = NULL;
+        return (result);
+    }
+    temp = s->top; //preserve top 
+    result.value = temp->value;
+    result.index = temp->index;  // save index before freeing
+    s->top = temp->next;
+    free(temp);
+    s->size--;
+    return (result);  // return the whole node by value
+}
+
+int		stack_peek(t_stack *s)
+{
+	if (!s || !s->top)
+		return (0);
+	return (s->top->value);
+}
+int     stack_peek_index(t_stack *s)  //new helper
+{
+    if (!s || !s->top)
+        return (0);
+    return (s->top->index);
+}
+
+int		stack_is_sorted(t_stack *s)
+{
+	t_node	*current;
+
+	current = s->top;
+	while (current->next != NULL)
+	{
+		if (current->value > current->next->value)
+			return (0);
+		current = current->next;
+	}
+	return (1);
+}
+
+void	stack_free(t_stack *s)
+{
+	if (!s)
+		return ;
+	while (s->top)
+		stack_pop(s);
+	free (s);
+}
+int		stack_size(t_stack *s)
+{
+	return(s->size);
 }
