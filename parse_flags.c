@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_flags.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: xsleepp <xsleepp@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 23:44:02 by aimdoyle          #+#    #+#             */
-/*   Updated: 2026/06/20 00:37:10 by aimdoyle         ###   ########.fr       */
+/*   Updated: 2026/06/25 22:55:48 by xsleepp          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void    parse_flags(int ac, char **av, t_opts *opts)
+void    parse_flags(int ac, char **av, t_opts *opts, t_stack *a, t_bench *bench)
 {
     int i;
 
@@ -74,7 +74,7 @@ void    parse_flags(int ac, char **av, t_opts *opts)
     {
         if (!ft_strcmp("--bench", av[i]))
             opts->bench = 1;
-        else if (!ft_strcmp("--adaptive", av[i]))
+        if (!ft_strcmp("--adaptive", av[i]))
             opts->strategy = ADAPTIVE;
         else if (!ft_strcmp("--simple", av[i]))
             opts->strategy = SIMPLE;
@@ -83,12 +83,13 @@ void    parse_flags(int ac, char **av, t_opts *opts)
         else if (!ft_strcmp("--complex", av[i]))
             opts->strategy = COMPLEX;
         else
-            exit_error(NULL);
+            exit_error(NULL, bench, a);
         i++;
+		if ((i == 2 && opts->bench == 0) || i == 3)
+			exit_error(NULL, bench, a);
     }
-    return ;
 }
-t_stack    *create_stack(char **array)
+t_stack    *create_stack(char **array, t_bench *bench)
 {
     long    num;
     int     i;
@@ -103,13 +104,15 @@ t_stack    *create_stack(char **array)
     stack->top = NULL;
     while (array[i])
     {
-		num = ft_atol(array[i]);
+		num = ft_atol(array[i++]);
 		if (num > INT_MAX || num < INT_MIN)
-			exit_error(array);
+		{
+			free(stack);
+			exit_error(array, bench, NULL);
+		}
 		tmp = ps_lstnew(num);
 		ft_lstadd_back(&stack->top, tmp);
         stack->size++;
-		i++;
 	}
 	index_nodes(stack);
     return (stack);

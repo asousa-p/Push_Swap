@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: xsleepp <xsleepp@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 00:15:15 by aimdoyle          #+#    #+#             */
-/*   Updated: 2026/06/20 03:01:34 by aimdoyle         ###   ########.fr       */
+/*   Updated: 2026/06/25 22:53:45 by xsleepp          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
+#ifndef	PUSH_SWAP_H
 # define PUSH_SWAP_H
 # include "libft.h"
 # include <limits.h>
@@ -22,22 +22,22 @@
 
 typedef struct s_stack
 {
-    t_node  *top;
-    int     size;
+    t_node 	*top;
+    int		size;
 }   t_stack;
 
 typedef enum e_strategy
 {
-    ADAPTIVE,
-    SIMPLE,
-    MEDIUM,
-    COMPLEX
+	ADAPTIVE,
+	SIMPLE,
+	MEDIUM,
+	COMPLEX
 }   t_strategy;
 
 typedef struct s_opts
 {
-    t_strategy  strategy;
-    int         bench;
+    t_strategy 	strategy;
+    int			bench;
 }   t_opts;
 
 typedef struct s_bench
@@ -80,15 +80,16 @@ char    **split(char const *s);
 long    ft_atol(const char *nptr);
 t_node  *ps_lstnew(int content);
 char    **avtoarray(int ac, char **av);
-t_stack *parse_args(int ac, char **av);
-void    exit_error(char **array);
-void    isvalid(char **array);
-void    isdouble(char **array);
+t_stack *parse_args(int ac, char **av, t_bench *bench);
+void    exit_error(char **array, t_bench *bench, t_stack *a);
+void    isvalid(char **array, t_bench *bench);
+void    isdouble(char **array, t_bench *bench);
 double  compute_disorder(t_stack *a);
 int     is_sorted(t_stack *a);
-t_stack *create_stack(char **array);
-void    parse_flags(int ac, char **av, t_opts *opts);
+t_stack *create_stack(char **array, t_bench *bench);
+void    parse_flags(int ac, char **av, t_opts *opts, t_stack *a, t_bench *bench);
 int     ft_strcmp(char *s1, char *s2);
+int		ft_sqrt(int n);
 void    freeit(char **array);
 void    index_nodes(t_stack *a);
 

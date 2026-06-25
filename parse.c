@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: xsleepp <xsleepp@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 23:44:28 by aimdoyle          #+#    #+#             */
-/*   Updated: 2026/06/20 01:48:52 by aimdoyle         ###   ########.fr       */
+/*   Updated: 2026/06/25 22:50:06 by xsleepp          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,19 @@ char    **avtoarray(int ac, char **av)
 	return (array);
 }
 
-void	exit_error(char **array)
+void	exit_error(char **array, t_bench *bench, t_stack *a)
 {
 	if (array)
 	{
 		freeit(array);
 	}
+	stack_free(a);
+	free(bench);
 	write(2, "Error\n", 6);
 	exit(1);
 }
 
-void	isvalid(char **array)
+void	isvalid(char **array, t_bench *bench)
 {
 	int i;
 	int j;
@@ -63,12 +65,12 @@ void	isvalid(char **array)
 		if (array[i][j] == '-' || array[i][j] == '+')
 			j++;
 		if (!array[i][j])
-			exit_error(array);
+			exit_error(array, bench, NULL);
 		while (array[i][j])
 		{
 			
 			if (!ft_isdigit(array[i][j]))
-				exit_error(array);
+				exit_error(array, bench, NULL);
 			j++;
 		}
 		i++;
@@ -76,7 +78,7 @@ void	isvalid(char **array)
 	return ;
 }
 
-void	isdouble(char **array)
+void	isdouble(char **array, t_bench *bench)
 {
 	int	i;
 	int	j;
@@ -89,14 +91,14 @@ void	isdouble(char **array)
 		while (array[j])
 		{
 			if (!ft_strcmp(array[i], array[j]))
-				exit_error(array);
+				exit_error(array, bench, NULL);
 			j++;
 		}
 		i++;
 	}
 }
 
-t_stack  *parse_args(int ac, char **av)
+t_stack  *parse_args(int ac, char **av, t_bench *bench)
 {
     char    **array;
 	t_stack	*stack;
@@ -108,10 +110,10 @@ t_stack  *parse_args(int ac, char **av)
 	if (!array)
 		return (NULL);
 	if (!array[0]) // now displays error for "",   array being NULL: "the array itself doesn't exist" (malloc failed),  array[0] being NULL: "the array exists but contains nothing"
-        exit_error(array);
-	isdouble(array);
-	isvalid(array);
-	stack = create_stack(array);
+        exit_error(array, bench, NULL);
+	isdouble(array, bench);
+	isvalid(array, bench);
+	stack = create_stack(array, bench);
 	freeit(array);
 	return (stack);
 }

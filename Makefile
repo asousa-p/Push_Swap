@@ -1,7 +1,7 @@
 NAME = push_swap
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -gdwarf-4
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -20,7 +20,7 @@ SRCS = main.c \
        parse.c \
        parse_flags.c \
        split.c \
-       free.c
+       helper.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -28,7 +28,7 @@ OBJS = $(SRCS:.c=.o)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -lm -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
