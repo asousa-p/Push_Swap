@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_flags.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xsleepp <xsleepp@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aimdoyle <aimdoyle@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 23:44:02 by aimdoyle          #+#    #+#             */
-/*   Updated: 2026/06/25 22:55:48 by xsleepp          ###   ########.fr       */
+/*   Updated: 2026/06/27 21:27:22 by aimdoyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 long	ft_atol(const char *nptr)
 {
-	int	i;
+	int		i;
 	long	result;
 	long	sign;
 
@@ -65,55 +65,58 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void    parse_flags(int ac, char **av, t_opts *opts, t_stack *a, t_bench *bench)
+void	parse_flags(int ac, char **av, t_opts *opts, t_clean *data)
 {
-    int i;
+	int		i;
+	t_stack	*a;
+	t_bench	*bench;
 
-    i = 1;
-    while (i < ac && av[i][0] == '-' && av[i][1] == '-')
-    {
-        if (!ft_strcmp("--bench", av[i]))
-            opts->bench = 1;
-        if (!ft_strcmp("--adaptive", av[i]))
-            opts->strategy = ADAPTIVE;
-        else if (!ft_strcmp("--simple", av[i]))
-            opts->strategy = SIMPLE;
-        else if (!ft_strcmp("--medium", av[i]))
-            opts->strategy = MEDIUM;
-        else if (!ft_strcmp("--complex", av[i]))
-            opts->strategy = COMPLEX;
-        else
-            exit_error(NULL, bench, a);
-        i++;
-		if ((i == 2 && opts->bench == 0) || i == 3)
+	a = data->a;
+	bench = data->bench;
+	free(data);
+	i = 0;
+	while (++i < ac && av[i][0] == '-' && av[i][1] == '-')
+	{
+		if (!ft_strcmp("--bench", av[i]))
+			opts->bench = 1;
+		else if (!ft_strcmp("--adaptive", av[i]))
+			opts->strategy = ADAPTIVE;
+		else if (!ft_strcmp("--simple", av[i]))
+			opts->strategy = SIMPLE;
+		else if (!ft_strcmp("--medium", av[i]))
+			opts->strategy = MEDIUM;
+		else if (!ft_strcmp("--complex", av[i]))
+			opts->strategy = COMPLEX;
+		else
 			exit_error(NULL, bench, a);
-    }
+		if ((i == 3 && opts->bench == 0) || i == 4)
+			exit_error(NULL, bench, a);
+	}
 }
-t_stack    *create_stack(char **array, t_bench *bench)
-{
-    long    num;
-    int     i;
-    t_node  *tmp;
-    t_stack *stack;
 
-    stack = malloc(sizeof(t_stack));
-    if (!stack)
-        return (NULL);
-    i = 0;
-    stack->size = 0;
-    stack->top = NULL;
-    while (array[i])
-    {
+t_stack	*create_stack(char **array, t_bench *bench)
+{
+	long	num;
+	int		i;
+	t_node	*tmp;
+	t_stack	*stack;
+
+	stack = malloc(sizeof(t_stack));
+	if (!stack)
+		return (NULL);
+	i = 0;
+	stack->size = 0;
+	stack->top = NULL;
+	while (array[i])
+	{
 		num = ft_atol(array[i++]);
 		if (num > INT_MAX || num < INT_MIN)
-		{
-			free(stack);
-			exit_error(array, bench, NULL);
-		}
+			exit_error(array, bench, stack);
 		tmp = ps_lstnew(num);
 		ft_lstadd_back(&stack->top, tmp);
-        stack->size++;
+		stack->size++;
 	}
+	check_duplicates(stack, array, bench);
 	index_nodes(stack);
-    return (stack);
+	return (stack);
 }

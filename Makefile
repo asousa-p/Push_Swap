@@ -1,7 +1,7 @@
 NAME = push_swap
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -gdwarf-4
+CFLAGS = -Wall -Wextra -Werror
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -10,7 +10,10 @@ INCLUDES = -I. -I$(LIBFT_DIR)
 
 SRCS = main.c \
        stack.c \
+	   stack2.c \
        operations.c \
+	   operations2.c \
+	   operations3.c \
        chunk_sort.c \
        adaptive_sort.c \
        write_bench.c \
